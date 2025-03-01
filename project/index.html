@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search User</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { padding: 10px; margin: 5px; }
+        .result { margin-top: 20px; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h2>Search User</h2>
+    <label>Name: <input type="text" id="name"></label>
+    <label>ID: <input type="text" id="id"></label>
+    <button onclick="searchUser()">Search</button>
+
+    <div id="result" class="result"></div>
+
+    <script>
+        async function searchUser() {
+            const name = document.getElementById("name").value.trim();
+            const id = document.getElementById("id").value.trim();
+            
+            if (!name || !id) {
+                document.getElementById("result").innerHTML = "<b style='color:red;'>Please enter both Name and ID.</b>";
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5001/getData?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`);
+                const data = await response.json();
+
+                if (data.message) {
+                    document.getElementById("result").innerHTML = `<b style="color:red;">${data.message}</b>`;
+                    return;
+                }
+
+                document.getElementById("result").innerHTML = `
+                    <h3>User Details</h3>
+                    <p><strong>Name:</strong> ${data.name}</p>
+                    <p><strong>ID:</strong> ${data.id}</p>
+                    <p><strong>Date:</strong> ${data.date}</p>
+                    <p><strong>Age:</strong> ${data.age}</p>
+                    <p><strong>Gender:</strong> ${data.gender}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Phone:</strong> ${data.phone}</p>
+                    <h3>Address</h3>
+                    <p><strong>Street:</strong> ${data.address.street}</p>
+                    <p><strong>City:</strong> ${data.address.city}</p>
+                    <p><strong>State:</strong> ${data.address.state}</p>
+                    <p><strong>Country:</strong> ${data.address.country}</p>
+                    <h3>Fitness Data</h3>
+                    <p><strong>Steps:</strong> ${data.fitnessData.steps}</p>
+                    <p><strong>Calories Burned:</strong> ${data.fitnessData.calories}</p>
+                    <p><strong>Workout Type:</strong> ${data.fitnessData.workoutType}</p>
+                `;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById("result").innerHTML = "<b style='color:red;'>Error fetching user details.</b>";
+            }
+        }
+    </script>
+</body>
+</html>
