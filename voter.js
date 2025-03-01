@@ -14,7 +14,7 @@ async function connectDB() {
     const collection = db.collection("voter_data"); // Replace with your collection name
 
     // Example: Insert a document
-    await collection.insertOne({ name: "John Doe", age: 25 });
+    await collection.insertOne({ name: "OrewaGaurav", age: 20 });
     console.log("Document inserted!");
 
   } catch (error) {
