@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB with better error handling
 mongoose.connect("mongodb://localhost:27017/main")
     .then(() => console.log("✅ Connected to MongoDB"))
     .catch(err => {
@@ -14,7 +13,6 @@ mongoose.connect("mongodb://localhost:27017/main")
         console.log("Please make sure MongoDB is running on your system");
     });
 
-// Define User Schema with proper validation
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -34,7 +32,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// API to fetch fitness data
 app.get("/fitness-data", async (req, res) => {
     const { name, day } = req.query;
 
@@ -60,7 +57,7 @@ app.get("/fitness-data", async (req, res) => {
     }
 });
 
-// Health check endpoint
+
 app.get("/health", (req, res) => {
     res.json({ status: "ok", mongodb: mongoose.connection.readyState === 1 });
 });
